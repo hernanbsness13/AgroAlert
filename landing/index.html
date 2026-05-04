@@ -1,17 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>AgroAlert</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body { font-family: Arial; text-align:center; padding:50px; }
-    h1 { color:#1B5E20; }
-    a { background:#1B5E20; color:white; padding:15px; text-decoration:none;}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #212121;
+      text-align: center;
+    }
+
+    header {
+      background: #1B5E20;
+      color: white;
+      padding: 60px 20px;
+    }
+
+    section {
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input {
+      padding: 12px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: #1B5E20;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    #msg {
+      margin-top: 15px;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
-  <h1>AgroAlert</h1>
-  <p>Alertas del campo por SMS</p>
-  <a href="#">Probar gratis</a>
+
+<header>
+  <h1>Decisiones del campo, directo a tu celular</h1>
+  <p>Alertas por SMS. Sin apps. Sin internet.</p>
+</header>
+
+<section>
+
+  <h2>Ejemplo real</h2>
+
+  <div class="card">
+    ❄️ Helada probable 72% (SMN + modelos)
+  </div>
+
+  <h2>Probalo gratis</h2>
+
+  <input id="phone" placeholder="Tu celular (ej: 3511234567)">
+  <br>
+  <button onclick="register()">Activar</button>
+
+  <p id="msg"></p>
+
+</section>
+
+<script>
+
+async function register() {
+  const phone = document.getElementById("phone").value;
+  document.getElementById("msg").innerText = "Procesando...";
+
+  let lat = null;
+  let lon = null;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        lat = pos.coords.latitude;
+        lon = pos.coords.longitude;
+        send(phone, lat, lon);
+      },
+      () => send(phone, lat, lon)
+    );
+  } else {
+    send(phone, lat, lon);
+  }
+}
+
+async function send(phone, lat, lon) {
+
+  const res = await fetch("https://TU-URL-RAILWAY/register", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ phone, lat, lon })
+  });
+
+  if (res.ok) {
+    document.getElementById("msg").innerText =
+      "Te enviamos un SMS. Respondé SI para activar.";
+  } else {
+    document.getElementById("msg").innerText =
+      "Error. Probá nuevamente.";
+  }
+}
+
+</script>
+
 </body>
 </html>
