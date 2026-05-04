@@ -104,7 +104,7 @@ async function register() {
 
 async function send(phone, lat, lon) {
 
-  const res = await fetch("https://TU-URL-RAILWAY/register", {
+  const res = await fetch("agroalert-production-a6bf.up.railway.app/register", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ phone, lat, lon })
