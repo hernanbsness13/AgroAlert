@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "landing/index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "landing/index.html"
+    }
+  ]
+}
